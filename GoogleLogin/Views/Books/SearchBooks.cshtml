@@ -1,0 +1,56 @@
+﻿@model GoogleLogin.Models.GoogleBooksApiResult
+
+@{
+    ViewBag.Title = "SearchBooks";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="row">
+    @Html.TextBox("Search", null, htmlAttributes: new { id = "SearchBookBox", placeholder = "Name of the book" })
+    <button id="SearchBookButton" value="Search" onclick="SearchBook()">Search</button><br />
+</div>
+<br />
+<div class="row">
+    <table>
+        @{
+            foreach (var item in Model.Items)
+            {
+                if (item.VolumeInfo.IndustryIdentifiers!=null && item.VolumeInfo.Authors!=null)
+                {
+                    <tr>
+                        <td style="border:1px solid">
+                            <div style="height:100px;width:100px">
+                                <img src="@item.VolumeInfo.ImageLinks.SmallThumbnail" style="height:100px;width:100px"/>
+                            </div>
+                        </td>
+                        <td style="border:1px solid">
+                            <div class="col-md-12">
+                                <center>
+                                    @item.VolumeInfo.Title
+                                </center>
+                            </div>
+                            <div>
+                                @{
+                                    string authors = "";
+                                    foreach (var author in item.VolumeInfo.Authors)
+                                    {
+                                        authors += author + ",";
+                                    }
+                                    string ISBN = "'ISBN:";
+                                    ISBN += item.VolumeInfo.IndustryIdentifiers[0].Identifier + "'";
+                                }
+                                Author(s):@authors<br />
+                                Publisher:@item.VolumeInfo.Publisher<br />
+                                Publish Date:@item.VolumeInfo.PublishedDate<br />
+                            </div>
+                        </td>
+                        <td style="border:1px solid">
+                            <button id="ViewBookButton" name="ViewBook" value="@ISBN" onclick="ViewBook(@ISBN)">View Book</button>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>
+
+

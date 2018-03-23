@@ -1,0 +1,23 @@
+﻿@if (Session["Username"] != null)
+{
+    if (Session["Username"].ToString() != "")
+    {
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <ul class="nav navbar-nav navbar-right" style="color:gray">
+                <li style="margin-top:16px;">
+                    @{
+                        string WelcomeLabel = "Hello " + Session["Username"];
+                    }
+                    @Html.Label("Welcome", WelcomeLabel, htmlAttributes: new { style = "color:gray" })
+                </li>
+                <li>
+                    @Html.ActionLink("Manage Favourites", "ManageFavourites", "Books", routeValues: null, htmlAttributes: new { id = "ManageFavouritesLink", style = "color:white;text-decoration:none" })
+                </li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+        }
+    }
+}

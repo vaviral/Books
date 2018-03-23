@@ -1,0 +1,118 @@
+﻿@model GoogleLogin.Models.BookDetails
+
+@{
+    ViewBag.Title = "ViewBook";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<script type="text/javascript" src="https://www.google.com/books/jsapi.js"></script>
+
+<div class="row">
+    <center>
+        <h2>@Model.VolumeInfo.Title</h2>
+    </center>
+</div>
+
+<input id="_ISBN" type="hidden" value="@ViewBag.ISBN" />
+<div class="row">
+    @{
+        string authours = "", categories = "";
+        if (Model.VolumeInfo.Authors.Count() > 1)
+        {
+            for (int i = 0; i < Model.VolumeInfo.Authors.Count() - 1; i++)
+            {
+                authours += Model.VolumeInfo.Authors[i] + ",";
+            }
+            authours += Model.VolumeInfo.Authors[Model.VolumeInfo.Categories.Count() - 1];
+        }
+        else
+        {
+            authours = Model.VolumeInfo.Authors[0];
+        }
+        if (Model.VolumeInfo.Categories.Count() > 1)
+        {
+            for (int i = 0; i < Model.VolumeInfo.Categories.Count() - 1; i++)
+            {
+                categories += Model.VolumeInfo.Categories[i] + ",";
+            }
+            categories += Model.VolumeInfo.Categories[Model.VolumeInfo.Categories.Count() - 1];
+        }
+        else
+        {
+            categories = Model.VolumeInfo.Categories[0];
+        }
+    }
+    <div class="col-md-8" id="viewerCanvas" style="height:500px">
+
+    </div>
+    <div class="col-md-offset-1 col-md-3">
+        <table>
+            <tr>
+                <th style="border:1px solid">
+                    @Html.DisplayNameFor(model => model.VolumeInfo.Title)
+                </th>
+                <td style="border:1px solid">
+                    @Html.DisplayFor(model => model.VolumeInfo.Title)
+                </td>
+            </tr>
+            <tr>
+                <th style="border:1px solid">
+                    @Html.DisplayNameFor(model => model.VolumeInfo.Authors)
+                </th>
+                <td style="border:1px solid">
+                    @Html.DisplayName(authours)
+                </td>
+            </tr>
+            <tr>
+                <th style="border:1px solid">
+                    @Html.DisplayNameFor(model => model.VolumeInfo.Publisher)
+                </th>
+                <td style="border:1px solid">
+                    @Html.DisplayFor(model => model.VolumeInfo.Publisher)
+                </td>
+            </tr>
+            <tr>
+                <th style="border:1px solid">
+                    @Html.DisplayNameFor(model => model.VolumeInfo.PublishedDate)
+                </th>
+                <td style="border:1px solid">
+                    @Html.DisplayFor(model => model.VolumeInfo.PublishedDate)
+                </td>
+            </tr>
+            <tr>
+                <th style="border:1px solid">
+                    @Html.DisplayNameFor(model => model.VolumeInfo.Categories)
+                </th>
+                <td style="border:1px solid">
+                    @Html.DisplayName(categories)
+                </td>
+            </tr>
+        </table>
+        <br /><br />
+        @{
+            string parameters = "'" + @ViewBag.ISBN + "','" + @Model.VolumeInfo.Title + "'";
+        }
+        @{
+            if (!(bool)ViewBag.IsFavourite)
+            {
+                <button id="AddToFavButton" onclick="AddToFav(@parameters)">Add to Favourites</button>
+                <button id="DeleteFromFavButton" onclick="DeleteFromFav(@parameters)" style="display:none">Remove from Favourites</button>
+            }
+            else
+            {
+                <button id="AddToFavButton" onclick="AddToFav(@parameters)" style="display:none">Add to Favourites</button>
+                <button id="DeleteFromFavButton" onclick="DeleteFromFav(@parameters)">Remove from Favourites</button>
+            }
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    google.books.load();
+    function initialize()
+    {
+        var ISBN = document.getElementById("_ISBN").value;
+        var viewer = new google.books.DefaultViewer(document.getElementById('viewerCanvas'));
+        viewer.load(ISBN);//can load through Book Id as well
+    }
+    google.books.setOnLoadCallback(initialize);
+</script>

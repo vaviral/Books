@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="jumbotron">
+    <h1>Star Books</h1>
+    <p class="lead">Star Books is a eb application through which you can search google books by name, View a book, and add/delete a book from favoutites.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <center>
+            <h2>
+                Getting started
+            </h2>
+        </center>
+        <p>
+            <ul>
+                <li>
+                    The user need to have a google account to login into the application.
+                </li>
+                <li>
+                    After Logging in user will get a search box on the home page where he/she can search for books.
+                </li>
+                <li>
+                    At the Search book page you will see the result of your search.
+                </li>
+                <li>
+                    Then you can click to view button to view the book.
+                </li>
+                <li>
+                    User can add the book to favourite on the view book page.
+                </li>
+                <li>
+                    User can manage his/her favourites from the manage favourites link on the navbar.
+                </li>
+                <li>
+                    Remember to logoff your account.
+                </li>
+            </ul>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <center>
+            <h2>Contact</h2>
+        </center>
+        <div class="col-md-6">
+            <address>
+                Aviral Vats<br />
+                <abbr title="Phone">P:8288871108</abbr>
+            </address>
+        </div>
+        <div class="col-md-6">
+            <address>
+                <strong>Support:</strong>   <a href="#">vaviral@gmail.com</a><br />
+            </address>
+        </div>
+    </div>
+    @if (Session["Username"] == null || Session["Username"].ToString() == "")
+    {
+        <div class="col-md-4">
+            <center>
+                <h2>Login with Google</h2>
+                @Html.Partial("_ExternalLogin")
+            </center>
+            @*<p>*@
+                @*@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })<br />*@
+                @*@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })*@
+                @*<div class="row">*@
+                @*</div>*@
+            @*</p>*@
+        </div>
+    }
+    else
+    {
+        <div class="col-md-4">
+            <center>
+                <h2>Manage Books</h2>
+            </center>
+            <p>
+                @Html.TextBox("Search", null, htmlAttributes: new { id = "SearchBookBox", placeholder = "Name of the book" })
+                <button id="SearchBookButton" value="Search" onclick="SearchBook()">Search</button><br />
+            </p>
+        </div>
+    }
+</div>

@@ -1,0 +1,94 @@
+﻿@model GoogleLogin.Models.Favourites
+
+@{
+    ViewBag.Title = "ManageFavourites";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<center>
+    <h2>
+        Manage your favourites here:
+    </h2>
+</center>
+<div class="row">
+    @{
+        if (Model.NameOfBook.Count() > 0)
+        {
+            <table>
+                <tr>
+                    <th>
+                        Image
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Author(s)
+                    </th>
+                    <th>
+                        Category(s)
+                    </th>
+                    <th>
+                        Publisher(s)
+                    </th>
+                    <th colspan="2">
+                        Action
+                    </th>
+                </tr>
+                @{ 
+                    for (int i = 0; i < Model.NameOfBook.Count(); i++)
+                    {
+                        <tr>
+                            <td style="border:1px solid">
+                                <img src="@Model.LinkForThumbnail[i]" style="height:100px;width:100px" />
+                            </td>
+                            <td style="border:1px solid">
+                                @Model.NameOfBook[i];
+                            </td>
+                            <td style="border:1px solid">
+                                @{
+                                    string authors = "";
+                                    foreach (var item in Model.Authors[i])
+                                    {
+                                        authors = item + ",";
+                                    }
+                                    string category = "";
+                                    foreach (var item in Model.Category[i])
+                                    {
+                                        category += item + ",";
+                                    }
+                                }
+                                @authors
+                            </td>
+                            <td style="border:1px solid">
+                                @category
+                            </td>
+                            <td style="border:1px solid">
+                                @Model.Publisher[i]
+                            </td>
+                            <td style="border:1px solid">
+                                @{
+                                    string parameters = "'" + @Model.IsbnOfBook[i] + "','" + @Model.NameOfBook[i] + "'";
+                                }
+                                <button id="AddToFavButton" onclick="AddToFav(@parameters)" style="display:none">Add to Favourites</button>
+                                <button id="DeleteFromFavButton" onclick="DeleteFromFav(@parameters)">Delete From Favourites</button>
+                            </td>
+                            <td style="border:1px solid">
+                                @{
+                                    string ISBN = "'" + Model.IsbnOfBook[i] + "'";
+                                }
+                                <button id="ViewBookButton" name="ViewBook" value="@ISBN" onclick="ViewBook(@ISBN)">View Book</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        }
+        else
+        {
+            <p>
+                You have not added any favourites to your list
+            </p>
+        }
+    }
+</div>
